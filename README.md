@@ -9,16 +9,15 @@ The key advantage with this implementation is that no data ever leaves your AWS 
 
 
 ## How to run the application locally
-1. Go to the [SageMaker folder](src/sagemaker)
-2. Install the required packages for this application with `pip install -r requirements.txt`. To avoid conflicts with existing python dependencies, it is best to do so in a virtual environment:   
+1. Install the required packages for this application with `pip install -r requirements.txt`. To avoid conflicts with existing python dependencies, it is best to do so in a virtual environment:   
   `$python3 -m venv .venv`    
   `$source .venv/bin/activate`  
   `$pip3 install -r requirements.txt`  
-3. You will need a SageMaker endpoint with the Falcon model deployed in your account. If you don't have, one you can use this [notebook](deploy_falcon-40b-instruct.ipynb) to deploy it in your account.
-4. (optional) Amend the [chatbot.py](chatbot.py) file so that it points to your endpoint (variable `endpoint_name`)
-5. Run the app with `streamlit run chatbot.py`
-6. Upload a text file (e.g. [Amazon's Q1 results](assets/amazon_q1_2023.txt))
-7. Start chatting 🤗
+2. You will need a SageMaker endpoint with the Falcon model deployed in your account. If you don't have, one you can use this [notebook](deploy_falcon-40b-instruct.ipynb) to deploy it in your account.
+3. (optional) Amend the [chatbot.py](chatbot.py) file so that it points to your endpoint (variable `endpoint_name`)
+4. Run the app with `streamlit run chatbot.py`
+5. Upload a text file (e.g. [Amazon's Q1 results](assets/amazon_q1_2023.txt))
+6. Start chatting 🤗
 
 
 ## Running Streamlit apps in SageMaker Studio
