@@ -38,8 +38,11 @@ Then you can run the application with the following command:
 ```
 docker run -v ~/.aws:/root/.aws -p 8501:8501 chatbot_image
 ```
-The fla -v allows you to bind mount your AWS credentials file from your host into the Docker container. This command tells Docker to mount the ~/.aws directory from your host machine into the /root/.aws directory in the Docker container. AWS SDKs will look for the credentials file in this location.
+The flag -v allows you to bind mount your AWS credentials file from your host into the Docker container. This command tells Docker to mount the ~/.aws directory from your host machine into the /root/.aws directory in the Docker container. AWS SDKs will look for the credentials file in this location.
+
 The format is -p <host_port>:<container_port>. If your application inside Docker listens on port 8501, for instance, and you want to access it via port 8501 on your host machine, you'd use -p 8501:8501.
 
-Access Your Application:
+
+**Access Your Application:**
+
 If your Docker container is running a web application, you should now be able to access it in a web browser at localhost:8501 (or whatever host port you used).
