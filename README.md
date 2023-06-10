@@ -13,7 +13,7 @@ The key advantage with this implementation is that no data ever leaves your AWS 
   `$python3 -m venv .venv`    
   `$source .venv/bin/activate`  
   `$pip3 install -r requirements.txt`  
-2. You will need a SageMaker endpoint with the Falcon model deployed in your account. If you don't have, one you can use this [notebook](deploy_falcon-40b-instruct.ipynb) to deploy it in your account.
+2. You will need a SageMaker endpoint with the Falcon model deployed in your account. If you don't have, one you can use this [notebook](deploy-falcon-40b-instruct.ipynb) to deploy it in your account.
 3. (optional) Amend the [chatbot.py](chatbot.py) file so that it points to your endpoint (variable `endpoint_name`)
 4. Run the app with `streamlit run chatbot.py`
 5. Upload a text file (e.g. [Amazon's Q1 results](assets/amazon_q1_2023.txt))
