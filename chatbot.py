@@ -7,11 +7,15 @@ from typing import Dict
 import json
 from io import StringIO
 from random import randint
+from transformers import AutoTokenizer
 
 st.set_page_config(page_title="Document Analysis", page_icon=":robot:")
 st.header("Chat with your document 📄  (Model: Falcon-40B-Instruct)")
 
-endpoint_name = "falcon-40b-instruct"
+endpoint_name = "falcon-40b-instruct-48xl"
+
+model = "tiiuae/falcon-40b"
+tokenizer = AutoTokenizer.from_pretrained(model)
 
 
 class ContentHandler(LLMContentHandler):
@@ -90,11 +94,16 @@ with container:
     # when a file is uploaded we also send the content to the chatchain object and ask for confirmation
     elif uploaded_file is not None:
         stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-        content = stringio.read()
-        content += "\nPlease confirm that you have read that file by saying 'Yes, I have read the file'"
+        content = "=== BEGIN FILE ===\n"
+        content += stringio.read().strip()
+        content += "\n=== END FILE ===\nPlease confirm that you have read that file by saying 'Yes, I have read the file'"
         output = chatchain(content)["response"]
         st.session_state['past'].append("I have uploaded a file. Please confirm that you have read that file.")
         st.session_state['generated'].append(output)
+
+    history = chatchain.memory.load_memory_variables({})["history"]
+    tokens = tokenizer.tokenize(history)
+    st.write(f"Number of tokens in memory: {len(tokens)}")
 
 # this loop is responsible for displaying the chat history
 if st.session_state['generated']:
@@ -102,3 +111,4 @@ if st.session_state['generated']:
         for i in range(len(st.session_state['generated'])):
             message(st.session_state["past"][i], is_user=True, key=str(i) + '_user')
             message(st.session_state["generated"][i], key=str(i))
+

@@ -66,3 +66,5 @@ urllib3==1.26.16
 validators==0.20.0
 yarl==1.9.2
 zipp==3.15.0
+
+transformers~=4.30.2
