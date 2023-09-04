@@ -10,9 +10,12 @@ from random import randint
 from transformers import AutoTokenizer
 
 st.set_page_config(page_title="Document Analysis", page_icon=":robot:")
-st.header("Chat with your document 📄  (Model: Falcon-40B-Instruct)")
+st.header("Chat with your document 📄 (Model: Alfred-40B-0723)")
 
-endpoint_name = "falcon-40b-instruct-48xl"
+endpoint_name = "alfred-40b-0723-48xl"
+# endpoint_name = "falcon-40b-instruct-48xl"
+# endpoint_name = "j2-jumbo-instruct"
+# endpoint_name = "openchat-8192-12xl"
 
 model = "tiiuae/falcon-40b"
 tokenizer = AutoTokenizer.from_pretrained(model)
@@ -25,14 +28,14 @@ class ContentHandler(LLMContentHandler):
 
     def transform_input(self, prompt: str, model_kwargs: Dict) -> bytes:
         self.len_prompt = len(prompt)
-        input_str = json.dumps({"inputs": prompt, "parameters": {"max_new_tokens": 100, "stop": ["Human:"], "do_sample": False, "repetition_penalty": 1.1}})
+        input_str = json.dumps({"inputs": prompt, "parameters": {"max_new_tokens": 200, "stop": ["User:", "Alfred:"], "do_sample": False, "repetition_penalty": 1.1, "return_full_text": False}})
         return input_str.encode('utf-8')
 
     def transform_output(self, output: bytes) -> str:
         response_json = output.read()
         res = json.loads(response_json)
-        ans = res[0]['generated_text'][self.len_prompt:]
-        ans = ans[:ans.rfind("Human")].strip()
+        ans = res[0]['generated_text']#[self.len_prompt:]
+        ans = ans[:ans.rfind("User:")].strip()
         return ans
 
 
@@ -88,7 +91,11 @@ with container:
 
     # when the submit button is pressed we send the user query to the chatchain object and save the chat history
     if submit_button and user_input:
-        output = chatchain(user_input)["response"]
+        if len(st.session_state['past']) == 0:
+            user_input_amended = f"Alfred is a large language model trained by LightOn. Knowledge cutoff: November 2022. Current date: 31 July, 2023\n\nUser: {user_input}\nAlfred:"
+            output = chatchain(user_input_amended)["response"]
+        else:
+            output = chatchain(user_input)["response"]
         st.session_state['past'].append(user_input)
         st.session_state['generated'].append(output)
     # when a file is uploaded we also send the content to the chatchain object and ask for confirmation
